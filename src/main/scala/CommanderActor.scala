@@ -9,16 +9,14 @@ class CommanderActor(counterActor: ActorRef) extends Actor {
   println("myActor has been instantiated")
   counterActor ! IncrementByOne
   counterActor ! IncrementByOne
-  counterActor ! IncrementByOne
-  counterActor ! IncrementByOne
-  counterActor ! IncrementByOne
+  counterActor ! IncrementByValue(3)
   counterActor ! TellValue
   counterActor ! IncrementByValue(50) // this will make the CounterActor fail!
   counterActor ! TellValue
 
   // behaviour
   override def receive: Receive = {
-    case ValueIs(value) => println("received value: " + value)
+    case ValueIs(value) => println(self + ", received value: " + value)
   }
 
 }

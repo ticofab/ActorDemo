@@ -8,20 +8,20 @@ import scala.concurrent.duration._
   */
 class Supervisor extends Actor {
 
-  val counterActor = context.actorOf(CounterActor.props)
-  val commanderActor = context.actorOf(CommanderActor.props(counterActor))
+  val counterActor = context.actorOf(CounterActor.props, "counter")
+  val commanderActor = context.actorOf(CommanderActor.props(counterActor), "commander")
 
   // behaviour for failing children
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 5.seconds) {
 
     case _: RuntimeException =>
-      println("child failed!")
+      println(self + ", child failed!, restarting it.")
       Restart
 
   }
 
   def receive = {
-    case _ => println("received something")
+    case _ => println(self + ", received something")
   }
 }
 

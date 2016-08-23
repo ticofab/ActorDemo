@@ -7,7 +7,7 @@ object ActorDemo extends App {
   println("ActorDemo starting")
 
   val actorSystem = ActorSystem("playground")
-  val supervisor = actorSystem.actorOf(Supervisor.props)
+  val supervisor = actorSystem.actorOf(Supervisor.props, "supervisor")
 
 }
 

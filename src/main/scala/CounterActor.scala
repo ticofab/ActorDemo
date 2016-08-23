@@ -29,6 +29,7 @@ class CounterActor extends Actor {
     case IncrementByValue(value) =>
       // if we are told to increment the state by more than 20 units, we crash
       if (value > 20) {
+        println(self + ", received a too big value! failing.")
         throw new RuntimeException
       }
       count = count + value
