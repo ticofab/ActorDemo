@@ -13,7 +13,7 @@ class CommanderActor(counterActor: ActorRef) extends Actor {
   counterActor ! IncrementByOne
   counterActor ! IncrementByOne
   counterActor ! TellValue
-  counterActor ! IncrementByValue(50) // this will make Fabio fail!
+  counterActor ! IncrementByValue(50) // this will make the CounterActor fail!
   counterActor ! TellValue
 
   // behaviour
