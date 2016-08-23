@@ -14,7 +14,7 @@ case object TellValue
 case class ValueIs(value: Int)
 // ------------------------
 
-class Fabio extends Actor {
+class CounterActor extends Actor {
 
   // internal state
   var count = 0
@@ -22,24 +22,21 @@ class Fabio extends Actor {
   // behaviour
   override def receive: Receive = {
 
-    case IncrementByOne => {
+    case IncrementByOne =>
       println(self + ", received IncrementByOne")
       count = count + 1
-    }
 
-    case IncrementByValue(value) => {
+    case IncrementByValue(value) =>
       // if we are told to increment the state by more than 20 units, we crash
       if (value > 20) {
         throw new RuntimeException
       }
       count = count + value
-    }
 
-    case TellValue => {
+    case TellValue =>
       // send our value back to our sender
       println(self + ", received TellValue")
       sender ! ValueIs(count)
-    }
 
     case _ => println("unknown message")
 
@@ -47,6 +44,6 @@ class Fabio extends Actor {
 
 }
 
-object Fabio {
-  def props = Props[Fabio]
+object CounterActor {
+  def props = Props[CounterActor]
 }

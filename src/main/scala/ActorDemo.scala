@@ -1,13 +1,13 @@
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor.ActorSystem
 
 /**
   * Created by fabiotiriticco on 30/06/2016.
   */
 object ActorDemo extends App {
-  println("Hello Arnoud")
+  println("ActorDemo starting")
 
   val actorSystem = ActorSystem("playground")
-  val superman = actorSystem.actorOf(Supervisor.props)
+  val supervisor = actorSystem.actorOf(Supervisor.props)
 
 }
 
