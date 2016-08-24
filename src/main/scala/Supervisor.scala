@@ -1,4 +1,4 @@
-import akka.actor.SupervisorStrategy.Restart
+import akka.actor.SupervisorStrategy.{Restart, Resume}
 import akka.actor.{Actor, OneForOneStrategy, Props}
 
 import scala.concurrent.duration._
@@ -14,10 +14,13 @@ class Supervisor extends Actor {
   // behaviour for failing children
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 5.seconds) {
 
-    case _: RuntimeException =>
+    case uoe: UnsupportedOperationException =>
       println(self + ", child failed!, restarting it.")
       Restart
 
+    case ae: ArithmeticException =>
+      println(self + ", child failed with an ArithmeticException. Resuming it.")
+      Resume
   }
 
   def receive = {

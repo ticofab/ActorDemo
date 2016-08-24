@@ -30,18 +30,34 @@ class CounterActor extends Actor {
       // if we are told to increment the state by more than 20 units, we crash
       if (value > 20) {
         println(self + ", received a too big value! failing.")
-        throw new RuntimeException
+        throw new UnsupportedOperationException()
+      } else if (value < 0) {
+        println(self + ", received a value < zero. failing.")
+        throw new ArithmeticException()
       }
       count = count + value
 
     case TellValue =>
       // send our value back to our sender
-      println(self + ", received TellValue")
       sender ! ValueIs(count)
 
     case _ => println("unknown message")
 
   }
+
+  override def preRestart(reason: Throwable, message: Option[Any]) = {
+    println(self + ", I am about to restart because of " + reason)
+    super.preRestart(reason, message)
+  }
+
+  override def postRestart(reason: Throwable) = {
+    println(self + ", ...restart completed, my state is: " + count)
+    super.postRestart(reason)
+  }
+
+  override def preStart() = println(self + ", preStart")
+
+  override def postStop() = println(self + ", postStop.")
 
 }
 
