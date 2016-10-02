@@ -5,7 +5,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Props}
   */
 
 // these are the messages that can be exchanged
-case object GiveMeNicotine
+case object GiveMeCaffeine
 
 case class HereIsYourCoffee(numberOfCups: Int)
 
@@ -15,22 +15,22 @@ case class OutOfCoffeeException(unsatisfiedCustomer: ActorRef) extends Exception
 class CoffeeMachine extends Actor with ActorLogging {
 
   // internal state
-  var nicotineReserve = 4
+  var caffeineReserve = 4
 
-  log.info(self.path.name + ", started. nicotineReserve: " + nicotineReserve)
+  log.info(self.path.name + ", started. caffeine reserve: " + caffeineReserve)
 
   // behaviour
   override def receive: Receive = {
 
-    case GiveMeNicotine =>
+    case GiveMeCaffeine =>
       log.info(self.path.name + ", received GiveMeNicotine")
-      if (nicotineReserve == 0) {
+      if (caffeineReserve == 0) {
         log.info(self.path.name + ", out of coffee!")
         throw OutOfCoffeeException(sender)
       }
 
       // send nicotine back to our sender
-      nicotineReserve = nicotineReserve - 1
+      caffeineReserve = caffeineReserve - 1
       sender ! HereIsYourCoffee(1)
 
     case _ => log.info("unknown message")
@@ -38,12 +38,12 @@ class CoffeeMachine extends Actor with ActorLogging {
   }
 
   override def postRestart(reason: Throwable) = {
-    log.info(self.path.name + ", ...restart completed, my nicotineAmount is: " + nicotineReserve)
+    log.info(self.path.name + ", ...restart completed, my caffeine reserve is: " + caffeineReserve)
 
     // do we have any unsatisfied customers in the pipeline?
     reason match {
       case OutOfCoffeeException(unsatisfiedCustomer) =>
-        nicotineReserve = nicotineReserve -1
+        caffeineReserve = caffeineReserve -1
         unsatisfiedCustomer ! HereIsYourCoffee(1)
     }
 
