@@ -10,13 +10,13 @@ class User(coffeeMachine: ActorRef) extends Actor with ActorLogging {
 
   // this stuff is executed as the actor comes to life
   log.info("User actor started")
-  coffeeMachine ! GiveMeCaffeine
+  coffeeMachine ! GiveMeCaffeine(self)
 
   // behaviour
   override def receive: Receive = {
     case HereIsYourCoffee(cups) =>
       log.info(self.path.name + ", received " + cups + " cup(s) of coffee")
-      context.system.scheduler.scheduleOnce(5000.millisecond, coffeeMachine, GiveMeCaffeine)
+      context.system.scheduler.scheduleOnce(2000.millisecond, coffeeMachine, GiveMeCaffeine(self))
   }
 
 }
