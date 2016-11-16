@@ -18,8 +18,10 @@ class Supervisor extends Actor with ActorLogging {
 
     case uoe: OutOfCoffeeException =>
       log.info(self.path.name + ", child failed!, restarting it.")
+      log.info(sender.toString + " is the failed child.")
       numersOfRestarts = numersOfRestarts + 1
-      Restart
+      sender ! IResumeYou(5)
+      Resume
   }
 
   def receive = {

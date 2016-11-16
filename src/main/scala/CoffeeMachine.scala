@@ -11,6 +11,8 @@ case class HereIsYourCoffee(numberOfCups: Int)
 
 case class OutOfCoffeeException() extends Exception
 
+case class IResumeYou(i: Int)
+
 // ------------------------
 
 class CoffeeMachine extends Actor with ActorLogging {
@@ -24,15 +26,19 @@ class CoffeeMachine extends Actor with ActorLogging {
   override def receive: Receive = {
 
     case GiveMeCaffeine(user) =>
-      log.info(self.path.name + ", received GiveMeNicotine")
+      log.info(self.path.name + ", received GiveMeCaffeine")
       if (caffeineReserve == 0) {
         log.info(self.path.name + ", out of coffee!")
         throw OutOfCoffeeException()
       }
 
       // send nicotine back to our sender
-      caffeineReserve = caffeineReserve - 1
+      caffeineReserve -= 1
       user ! HereIsYourCoffee(1)
+
+    case IResumeYou(i) =>
+      caffeineReserve += i
+      log.info("resumed with " + i + ", caffeineReserve: " + caffeineReserve)
 
     case _ => log.info("unknown message")
 
