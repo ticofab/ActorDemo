@@ -11,7 +11,7 @@ case class HereIsYourCoffee(numberOfCups: Int)
 
 case class OutOfCoffeeException() extends Exception
 
-case class IResumeYou(i: Int)
+case class RechargeCoffee(coffeeAmount: Int)
 
 // ------------------------
 
@@ -36,9 +36,9 @@ class CoffeeMachine extends Actor with ActorLogging {
       caffeineReserve -= 1
       user ! HereIsYourCoffee(1)
 
-    case IResumeYou(i) =>
-      caffeineReserve += i
-      log.info("resumed with " + i + ", caffeineReserve: " + caffeineReserve)
+    case RechargeCoffee(coffeeAmount) =>
+      caffeineReserve += coffeeAmount
+      log.info("resumed with " + coffeeAmount + ", caffeineReserve: " + caffeineReserve)
 
     case _ => log.info("unknown message")
 
