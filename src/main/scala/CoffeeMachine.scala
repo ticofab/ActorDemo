@@ -11,8 +11,6 @@ case class HereIsYourCoffee(numberOfCups: Int)
 
 case class OutOfCoffeeException() extends Exception
 
-case class RechargeCoffee(coffeeAmount: Int)
-
 // ------------------------
 
 class CoffeeMachine extends Actor with ActorLogging {
@@ -36,18 +34,12 @@ class CoffeeMachine extends Actor with ActorLogging {
       caffeineReserve -= 1
       user ! HereIsYourCoffee(1)
 
-    case RechargeCoffee(coffeeAmount) =>
-      caffeineReserve += coffeeAmount
-      log.info("resumed with " + coffeeAmount + ", caffeineReserve: " + caffeineReserve)
-
-    case _ => log.info("unknown message")
-
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) {
     log.info("about to restart")
-    message.foreach(self ! _)
     super.preRestart(reason, message)
+    message.foreach(self ! _)
   }
 
   override def postRestart(reason: Throwable) = {
