@@ -1,7 +1,9 @@
+package letitcrash
+
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 
-import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 /**
   * Created by fabiotiriticco on 30/06/2016.
@@ -9,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class User(coffeeMachine: ActorRef) extends Actor with ActorLogging {
 
   // this stuff is executed as the actor comes to life
-  log.info("User actor started")
+  log.info("base.User actor started")
   coffeeMachine ! GiveMeCaffeine(self)
 
   // behaviour

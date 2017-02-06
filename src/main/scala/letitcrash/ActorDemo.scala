@@ -1,3 +1,5 @@
+package letitcrash
+
 import akka.actor.ActorSystem
 
 /**
@@ -8,4 +10,3 @@ object ActorDemo extends App {
   val actorSystem = ActorSystem("playground")
   val supervisor = actorSystem.actorOf(Supervisor.props, "supervisor")
 }
-

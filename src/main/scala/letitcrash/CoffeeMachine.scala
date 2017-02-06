@@ -1,18 +1,11 @@
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+package letitcrash
+
+import akka.actor.{Actor, ActorLogging, Props}
 
 /**
-  * Created by fabiotiriticco on 30/06/2016.
+  * Default (Template) Project
+  * Created by fabiotiriticco on 06/02/2017.
   */
-
-// these are the messages that can be exchanged
-case class GiveMeCaffeine(sender: ActorRef)
-
-case class HereIsYourCoffee(numberOfCups: Int)
-
-case class OutOfCoffeeException() extends Exception
-
-// ------------------------
-
 class CoffeeMachine extends Actor with ActorLogging {
 
   // internal state

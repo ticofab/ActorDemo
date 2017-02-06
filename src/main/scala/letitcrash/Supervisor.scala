@@ -1,4 +1,6 @@
-import akka.actor.SupervisorStrategy.{Restart, Resume}
+package letitcrash
+
+import akka.actor.SupervisorStrategy.Restart
 import akka.actor.{Actor, ActorLogging, OneForOneStrategy, Props}
 
 import scala.concurrent.duration._
