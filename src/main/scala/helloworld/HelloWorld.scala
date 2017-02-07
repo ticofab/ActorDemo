@@ -1,6 +1,6 @@
 package helloworld
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -25,10 +25,7 @@ class PingActor extends Actor {
 }
 
 // the supervisor
-class Supervisor extends Actor {
-
-  // instantiate ping actor
-  val pingActor = context.actorOf(Props(new PingActor))
+class PongActor(pingActor: ActorRef) extends Actor {
 
   // send messages to ping actor
   pingActor ! Ping
@@ -46,8 +43,11 @@ object HelloWorld extends App {
   // instantiate actor system
   val as = ActorSystem()
 
+  // instantiate ping actor
+  val pingActor = as.actorOf(Props(new PingActor), "pingActor")
+
   // instantiate supervisor
-  as.actorOf(Props(new Supervisor), "supervisor")
+  as.actorOf(Props(new PongActor(pingActor)), "pongActor")
 
   // terminate the actor system
   as.terminate()
