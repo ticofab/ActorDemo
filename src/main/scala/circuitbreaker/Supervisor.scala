@@ -20,7 +20,7 @@ class Supervisor extends Actor {
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 5.seconds) {
 
     case _: OutOfCoffeeException =>
-      println(self.path.name + ", " + "{} failed!, restarting it.", sender.path.name)
+      println(self.path.name + ", " + sender.path.name + " failed!, restarting it.")
       Restart
   }
 

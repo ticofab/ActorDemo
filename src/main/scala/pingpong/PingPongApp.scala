@@ -1,4 +1,4 @@
-package helloworld
+package pingpong
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
@@ -31,12 +31,17 @@ class PingActor(pongActor: ActorRef) extends Actor {
   pongActor ! Ping
 
   override def receive = {
-    case Pong(pings) => println(self.path.name + ", received Pong with " + pings)
+    case Pong(pings) =>
+      println(self.path.name + ", received Pong with " + pings)
+      if (pings == 3) {
+        // shut system down
+        context.system.terminate()
+      }
   }
 }
 
 // the program entry point
-object HelloWorld extends App {
+object PingPongApp extends App {
 
   // instantiate actor system
   val as = ActorSystem()
@@ -47,7 +52,6 @@ object HelloWorld extends App {
   // instantiate supervisor
   as.actorOf(Props(new PingActor(pongActor)), "pingActor")
 
-  // terminate the actor system
-  as.terminate()
+  // wait for signal to terminate
   Await.result(as.whenTerminated, Duration.Inf)
 }
