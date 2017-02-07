@@ -1,25 +1,26 @@
 package letitcrash
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{Actor, ActorRef, Props}
 
-/**
-  * Default (Template) Project
-  * Created by fabiotiriticco on 06/02/2017.
-  */
-class CoffeeMachine extends Actor with ActorLogging {
+// these are the messages that can be exchanged
+case class GiveMeCaffeine(sender: ActorRef)
+
+case class HereIsYourCoffee(numberOfCups: Int)
+
+class CoffeeMachine extends Actor {
 
   // internal state
   var caffeineReserve = 4
 
-  log.info(self.path.name + ", started. caffeine reserve: " + caffeineReserve)
+  println(self.path.name + ", started. caffeine reserve: " + caffeineReserve)
 
   // behaviour
   override def receive: Receive = {
 
     case GiveMeCaffeine(user) =>
-      log.info(self.path.name + ", received GiveMeCaffeine")
+      println(self.path.name + ", received GiveMeCaffeine")
       if (caffeineReserve == 0) {
-        log.info(self.path.name + ", out of coffee!")
+        println(self.path.name + ", out of coffee!")
         throw OutOfCoffeeException()
       }
 
@@ -30,13 +31,13 @@ class CoffeeMachine extends Actor with ActorLogging {
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) {
-    log.info("about to restart")
+    println(self.path.name + ", about to restart")
     super.preRestart(reason, message)
     message.foreach(self ! _)
   }
 
   override def postRestart(reason: Throwable) = {
-    log.info(self.path.name + ", ...restart completed, my caffeine reserve is: " + caffeineReserve)
+    println(self.path.name + ", ...restart completed, my caffeine reserve is: " + caffeineReserve)
     super.postRestart(reason)
   }
 

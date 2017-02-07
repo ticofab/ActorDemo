@@ -1,6 +1,6 @@
 package circuitbreaker
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import akka.pattern.{AskTimeoutException, CircuitBreaker, CircuitBreakerOpenException, ask}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,37 +21,35 @@ case class SorrySomethingIsWrong()
 
 case class OutOfOrder()
 
-class CoffeeMachine(coffeeBrewer: ActorRef) extends Actor with ActorLogging {
+class CoffeeMachine(coffeeBrewer: ActorRef) extends Actor {
 
   val breaker = CircuitBreaker(
     context.system.scheduler,
     1,
     10.second,
     20.second)
-    .onOpen(log.info("Circuit Breaker is open"))
-    .onClose(log.info("Circuit Breaker is closed"))
-    .onHalfOpen(log.info("Circuit Breaker is half open, next message will go through"))
+    .onOpen(println(self.path.name + ", " + "Circuit Breaker is open"))
+    .onClose(println(self.path.name + ", " + "Circuit Breaker is closed"))
+    .onHalfOpen(println(self.path.name + ", " + "Circuit Breaker is half open, next message will go through"))
 
   // behaviour
   override def receive: Receive = {
 
     case GiveMeCaffeine(user, euros) =>
-      log.info("received GiveMeCaffeine")
       if (euros != 2) user ! InvalidAmount(euros)
       else {
         // let's see if we can brew coffee
-        val futureCoffee = breaker.withCircuitBreaker((coffeeBrewer ? BrewCoffee) (5.second))
+        val futureCoffee = breaker.withCircuitBreaker((coffeeBrewer ? BrewCoffee) (8.second))
         futureCoffee.mapTo[CoffeeBrewed].map(cb => {
-          log.info("sending coffee to user")
           user ! HereIsYourCoffee(1)
         }).recover {
 
           case t: AskTimeoutException =>
-            log.info("the coffee brewer timed out")
+            println(self.path.name + ", " + "the coffee brewer timed out")
             user ! SorrySomethingIsWrong()
 
           case co: CircuitBreakerOpenException =>
-            log.info("circuit breaker open")
+            println(self.path.name + ", " + "circuit breaker open")
             user ! OutOfOrder()
 
         }

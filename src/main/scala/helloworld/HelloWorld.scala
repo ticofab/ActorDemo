@@ -1,6 +1,6 @@
 package helloworld
 
-import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
+import akka.actor.{Actor, ActorSystem, Props}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -12,7 +12,7 @@ case object Ping
 case class Pong(pings: Int)
 
 // the ping actor
-class PingActor extends Actor with ActorLogging {
+class PingActor extends Actor {
 
   // internal state
   var pings = 0
@@ -25,7 +25,7 @@ class PingActor extends Actor with ActorLogging {
 }
 
 // the supervisor
-class Supervisor extends Actor with ActorLogging {
+class Supervisor extends Actor {
 
   // instantiate ping actor
   val pingActor = context.actorOf(Props(new PingActor))
@@ -36,7 +36,7 @@ class Supervisor extends Actor with ActorLogging {
   pingActor ! Ping
 
   override def receive = {
-    case Pong(pings) => log.info("received Pong with {}", pings)
+    case Pong(pings) => println(self.path.name + ", received Pong with " + pings)
   }
 }
 

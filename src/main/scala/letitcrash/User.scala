@@ -1,6 +1,6 @@
 package letitcrash
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, Props}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -8,16 +8,16 @@ import scala.concurrent.duration._
 /**
   * Created by fabiotiriticco on 30/06/2016.
   */
-class User(coffeeMachine: ActorRef) extends Actor with ActorLogging {
+class User(coffeeMachine: ActorRef) extends Actor {
 
   // this stuff is executed as the actor comes to life
-  log.info("base.User actor started")
+  println(self.path.name + ", " + "User actor started")
   coffeeMachine ! GiveMeCaffeine(self)
 
   // behaviour
   override def receive: Receive = {
     case HereIsYourCoffee(cups) =>
-      log.info(self.path.name + ", received " + cups + " cup(s) of coffee")
+      println(self.path.name + ", received " + cups + " cup(s) of coffee")
       context.system.scheduler.scheduleOnce(2000.millisecond, coffeeMachine, GiveMeCaffeine(self))
   }
 

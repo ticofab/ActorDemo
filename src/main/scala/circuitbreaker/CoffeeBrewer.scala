@@ -1,6 +1,6 @@
 package circuitbreaker
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{Actor, Props}
 
 /**
   * ActorDemo
@@ -12,7 +12,7 @@ case class CoffeeBrewed()
 
 case class OutOfCoffeeException() extends Exception
 
-class CoffeeBrewer extends Actor with ActorLogging {
+class CoffeeBrewer extends Actor {
 
   // internal state
   var caffeineReserve = 4
@@ -21,17 +21,17 @@ class CoffeeBrewer extends Actor with ActorLogging {
     case BrewCoffee =>
 
       if (caffeineReserve == 0) {
-        log.error("out of coffee!")
+        println(self + ", out of coffee!")
         throw OutOfCoffeeException()
       }
 
-      log.info("brewing coffee")
+      println(self.path.name + ", " + "brewing coffee")
       caffeineReserve -= 1
       sender ! CoffeeBrewed()
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]) = {
-    log.info("starting up.. it will take me 20 seconds")
+    println(self.path.name + ", " + "starting up.. it will take me 20 seconds")
     super.preRestart(reason, message)
   }
 }

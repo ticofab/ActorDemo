@@ -1,6 +1,6 @@
 package circuitbreaker
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, Props}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -9,24 +9,24 @@ import scala.concurrent.duration._
   * ActorDemo
   * Created by fabiotiriticco on 06/02/2017.
   */
-class User(coffeeMachine: ActorRef) extends Actor with ActorLogging {
+class User(coffeeMachine: ActorRef) extends Actor {
 
   // this stuff is executed as the actor comes to life
-  log.info("User actor started")
+  println(self.path.name + ", " + "User actor started")
   coffeeMachine ! GiveMeCaffeine(self, 2)
 
   // behaviour
   override def receive: Receive = {
     case HereIsYourCoffee(cups) =>
-      log.info("received " + cups + " cup(s) of coffee")
+      println(self.path.name + ", " + "received " + cups + " cup of coffee")
       askForCoffee
 
     case SorrySomethingIsWrong() =>
-      log.info("Wow that took a while, let me try again.")
+      println(self.path.name + ", " + "Wow that took a while, let me try again.")
       askForCoffee
 
     case OutOfOrder() =>
-      log.info("received OutOfOrder, let me try again.")
+      println(self.path.name + ", " + "received OutOfOrder, let me try again.")
       askForCoffee
   }
 

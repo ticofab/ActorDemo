@@ -1,7 +1,7 @@
 package circuitbreaker
 
 import akka.actor.SupervisorStrategy.Restart
-import akka.actor.{Actor, ActorLogging, OneForOneStrategy, Props}
+import akka.actor.{Actor, OneForOneStrategy, Props}
 
 import scala.concurrent.duration._
 
@@ -10,7 +10,7 @@ import scala.concurrent.duration._
   * ActorDemo
   * Created by fabiotiriticco on 06/02/2017.
   */
-class Supervisor extends Actor with ActorLogging {
+class Supervisor extends Actor {
 
   val coffeeBrewer = context.actorOf(CoffeeBrewer.props, "CoffeeBrewer")
   val coffeeMachine = context.actorOf(CoffeeMachine.props(coffeeBrewer), "CoffeeMachine")
@@ -20,12 +20,12 @@ class Supervisor extends Actor with ActorLogging {
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 5.seconds) {
 
     case _: OutOfCoffeeException =>
-      log.info("{} failed!, restarting it.", sender.path.name)
+      println(self.path.name + ", " + "{} failed!, restarting it.", sender.path.name)
       Restart
   }
 
   def receive = {
-    case _ => log.info("received something unexpected")
+    case _ => println(self.path.name + ", " + "received something unexpected")
   }
 }
 
