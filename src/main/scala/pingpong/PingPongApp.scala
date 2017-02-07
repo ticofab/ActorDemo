@@ -5,11 +5,18 @@ import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-// a ping message (no information attached)
-case object Ping
+class PingActor(pongActor: ActorRef) extends Actor {
 
-// a pong message (carries information)
-case class Pong(pings: Int)
+  // send messages to ping actor
+  pongActor ! Ping
+  pongActor ! Ping
+  pongActor ! Ping
+
+  override def receive = {
+    case Pong(pings) =>
+      println(self.path.name + ", received Pong with " + pings)
+  }
+}
 
 class PongActor extends Actor {
 
@@ -23,22 +30,11 @@ class PongActor extends Actor {
   }
 }
 
-class PingActor(pongActor: ActorRef) extends Actor {
+// a ping message (no information attached)
+case object Ping
 
-  // send messages to ping actor
-  pongActor ! Ping
-  pongActor ! Ping
-  pongActor ! Ping
-
-  override def receive = {
-    case Pong(pings) =>
-      println(self.path.name + ", received Pong with " + pings)
-      if (pings == 3) {
-        // shut system down
-        context.system.terminate()
-      }
-  }
-}
+// a pong message (carries information)
+case class Pong(pings: Int)
 
 // the program entry point
 object PingPongApp extends App {
@@ -51,7 +47,4 @@ object PingPongApp extends App {
 
   // instantiate supervisor
   as.actorOf(Props(new PingActor(pongActor)), "pingActor")
-
-  // wait for signal to terminate
-  Await.result(as.whenTerminated, Duration.Inf)
 }

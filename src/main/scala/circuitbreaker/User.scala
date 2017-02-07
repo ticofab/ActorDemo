@@ -11,9 +11,6 @@ import scala.concurrent.duration._
   */
 class User(coffeeMachine: ActorRef) extends Actor {
 
-  // internal state
-  var coffeeIngested = 0
-
   // this stuff is executed as the actor comes to life
   println(self.path.name + ", " + "User actor started")
   coffeeMachine ! GiveMeCaffeine(self, 2)
@@ -22,10 +19,7 @@ class User(coffeeMachine: ActorRef) extends Actor {
   override def receive: Receive = {
     case HereIsYourCoffee(cups) =>
       println(self.path.name + ", " + "received " + cups + " cup of coffee")
-      coffeeIngested = coffeeIngested + cups
-      if (coffeeIngested > 10) {
-        context.system.terminate()
-      } else askForCoffee
+      askForCoffee
 
     case SorrySomethingIsWrong() =>
       println(self.path.name + ", " + "Wow that took a while, let me try again.")

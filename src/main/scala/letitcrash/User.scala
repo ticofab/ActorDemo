@@ -10,9 +10,6 @@ import scala.concurrent.duration._
   */
 class User(coffeeMachine: ActorRef) extends Actor {
 
-  // internal state
-  var coffeeIngested = 0
-
   // this stuff is executed as the actor comes to life
   println(self.path.name + ", " + "User actor started")
   coffeeMachine ! GiveMeCaffeine(self)
@@ -22,10 +19,6 @@ class User(coffeeMachine: ActorRef) extends Actor {
     case HereIsYourCoffee(cups) =>
       println(self.path.name + ", received " + cups + " cup(s) of coffee")
       context.system.scheduler.scheduleOnce(2000.millisecond, coffeeMachine, GiveMeCaffeine(self))
-      coffeeIngested = coffeeIngested + cups
-      if (coffeeIngested > 10) {
-        context.system.terminate()
-      }
   }
 
 }
