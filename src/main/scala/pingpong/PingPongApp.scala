@@ -2,22 +2,6 @@ package pingpong
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-
-class PingActor(pongActor: ActorRef) extends Actor {
-
-  // send messages to ping actor
-  pongActor ! Ping
-  pongActor ! Ping
-  pongActor ! Ping
-
-  override def receive = {
-    case Pong(pings) =>
-      println(self.path.name + ", received Pong with " + pings)
-  }
-}
-
 class PongActor extends Actor {
 
   // internal state
@@ -25,8 +9,24 @@ class PongActor extends Actor {
 
   override def receive = {
     case Ping =>
+      println(self.path.name + ", received one ping.")
       pings = pings + 1
       sender ! Pong(pings)
+  }
+}
+
+class PingActor(pongActor: ActorRef) extends Actor {
+
+  // send messages to ping actor
+  pongActor ! Ping
+
+  override def receive = {
+    case Pong(pings) =>
+      println(self.path.name + ", received Pong with " + pings + " pings.")
+
+      // if we received 3 pings back terminate the system, otherwise send another one
+      if (pings < 3) pongActor ! Ping
+      else context.system.terminate()
   }
 }
 
