@@ -7,6 +7,8 @@ case class GiveMeCaffeine(sender: ActorRef)
 
 case class HereIsYourCoffee(numberOfCups: Int)
 
+case class OutOfCoffeeException() extends Exception
+
 class CoffeeMachine extends Actor {
 
   // internal state
