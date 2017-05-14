@@ -7,7 +7,7 @@ fails if the increment is too big, and this triggers its supervisor to restart i
 License
 --------
 
-    Copyright 2016 Fabio Tiriticco / Fabway
+    Copyright 2017 Fabio Tiriticco / Fabway
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
