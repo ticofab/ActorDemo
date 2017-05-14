@@ -37,5 +37,5 @@ class CoffeeBrewer extends Actor {
 }
 
 object CoffeeBrewer {
-  val props: Props = Props(new CoffeeBrewer)
+  def apply() = Props(new CoffeeBrewer)
 }

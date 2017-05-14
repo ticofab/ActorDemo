@@ -10,8 +10,8 @@ import scala.concurrent.duration._
   */
 class Supervisor extends Actor {
 
-  val coffeeMachine = context.actorOf(CoffeeMachine.props, "CoffeeMachine")
-  val user = context.actorOf(User.props(coffeeMachine), "User")
+  val coffeeMachine = context.actorOf(CoffeeMachine(), "CoffeeMachine")
+  val user = context.actorOf(User(coffeeMachine), "User")
 
   // behaviour for failing children
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 5.seconds) {

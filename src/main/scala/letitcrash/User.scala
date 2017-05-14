@@ -25,7 +25,7 @@ class User(coffeeMachine: ActorRef) extends Actor {
 
 // this is the companion object - it describes how the actor needs to be created
 object User {
-  def props(coffeeMachine: ActorRef) = Props(new User(coffeeMachine))
+  def apply(coffeeMachine: ActorRef) = Props(new User(coffeeMachine))
 }
 
 

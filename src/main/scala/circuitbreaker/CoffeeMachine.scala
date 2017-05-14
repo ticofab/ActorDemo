@@ -61,5 +61,5 @@ class CoffeeMachine(coffeeBrewer: ActorRef) extends Actor {
 }
 
 object CoffeeMachine {
-  def props(coffeeBrewer: ActorRef) = Props(new CoffeeMachine(coffeeBrewer))
+  def apply(coffeeBrewer: ActorRef) = Props(new CoffeeMachine(coffeeBrewer))
 }

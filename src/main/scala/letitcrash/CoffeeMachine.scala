@@ -38,13 +38,8 @@ class CoffeeMachine extends Actor {
     message.foreach(self ! _)
   }
 
-  override def postRestart(reason: Throwable) = {
-    println(self.path.name + ", ...restart completed, my caffeine reserve is: " + caffeineReserve)
-    super.postRestart(reason)
-  }
-
 }
 
 object CoffeeMachine {
-  def props = Props[CoffeeMachine]
+  def apply() = Props[CoffeeMachine]
 }

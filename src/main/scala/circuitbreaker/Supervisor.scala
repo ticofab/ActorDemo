@@ -5,16 +5,15 @@ import akka.actor.{Actor, OneForOneStrategy, Props}
 
 import scala.concurrent.duration._
 
-
 /**
   * ActorDemo
   * Created by fabiotiriticco on 06/02/2017.
   */
 class Supervisor extends Actor {
 
-  val coffeeBrewer = context.actorOf(CoffeeBrewer.props, "CoffeeBrewer")
-  val coffeeMachine = context.actorOf(CoffeeMachine.props(coffeeBrewer), "CoffeeMachine")
-  val user = context.actorOf(User.props(coffeeMachine), "User")
+  val coffeeBrewer = context.actorOf(CoffeeBrewer(), "CoffeeBrewer")
+  val coffeeMachine = context.actorOf(CoffeeMachine(coffeeBrewer), "CoffeeMachine")
+  val user = context.actorOf(User(coffeeMachine), "User")
 
   // behaviour for failing children
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 3, withinTimeRange = 5.seconds) {
