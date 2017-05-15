@@ -7,6 +7,7 @@ class PongActor extends Actor {
   // internal state
   var pings = 0
 
+  // actor's behaviour
   override def receive = {
     case Ping =>
       println(self.path.name + ", received one ping.")
