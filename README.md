@@ -1,8 +1,11 @@
 Actor Demo
 ======================
 
-Simple app to show the basics of Actor Supervision using Akka & Scala. A counter actor increments value when told to and
-fails if the increment is too big, and this triggers its supervisor to restart it.
+A couple of exampls apps to showcase the power of Actor Programming using Akka & Scala. The apps show:
+
+* Asynchronous messaging
+* Actor Supervision
+* Bounding latency with a Circuit Breaker
 
 License
 --------
