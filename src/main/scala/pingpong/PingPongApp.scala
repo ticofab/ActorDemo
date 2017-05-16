@@ -25,9 +25,8 @@ class PingActor(pongActor: ActorRef) extends Actor {
     case Pong(pings) =>
       println(self.path.name + ", received Pong with " + pings + " pings.")
 
-      // if we received 3 pings back terminate the system, otherwise send another one
+      // if we received less than 3 pings back send another one
       if (pings < 3) pongActor ! Ping
-      else context.system.terminate()
   }
 }
 
