@@ -18,6 +18,20 @@ package pingpong
 
 import akka.actor.{Actor, ActorRef, ActorSystem, PoisonPill, Props}
 
+// ---------------------------------------
+// ------ Messages to be exchanged -------
+// ---------------------------------------
+
+// a ping message (no information attached)
+case object Ping
+
+// a pong message (carries information)
+case class Pong(value: Int)
+
+// -------------------------------------
+// ------ Actor implementations --------
+// -------------------------------------
+
 class PongActor extends Actor {
 
   // internal state
@@ -52,13 +66,10 @@ class PingActor(pongActor: ActorRef) extends Actor {
   }
 }
 
-// a ping message (no information attached)
-case object Ping
+// -----------------------------------
+// ------ The app entry point --------
+// -----------------------------------
 
-// a pong message (carries information)
-case class Pong(pings: Int)
-
-// the program entry point
 object PingPongApp extends App {
 
   // instantiate actor system
