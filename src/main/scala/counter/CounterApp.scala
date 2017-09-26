@@ -43,7 +43,7 @@ class CounterActor extends Actor {
   // actor's behaviour
   override def receive = {
     case Increment =>
-      println(self.path.name + ": received one invcrement message.")
+      println(self.path.name + ": received one increment message.")
       counter = counter + 1
 
     case GetCounterValue =>
