@@ -1,10 +1,11 @@
 # Actor Demo
 
-A couple of examples apps to showcase the power of Actor Programming using Akka & Scala. The apps show:
+A few examples apps to showcase the power of Actor Programming using Akka & Scala. The apps show:
 
 * Asynchronous messaging
 * Actor Supervision
 * Bounding latency with a Circuit Breaker
+* Distribution with Akka Cluster
 
 ## License
 
