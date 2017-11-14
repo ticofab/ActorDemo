@@ -2,14 +2,15 @@ name := "ActorDemo"
 
 version := "1.0"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 
 libraryDependencies ++= {
 
-  val akkaVersion = "2.5.3"
+  val akkaVersion = "2.5.6"
 
   Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+    "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
 
     // test
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",

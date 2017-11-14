@@ -14,7 +14,7 @@
   * limitations under the License.
   */
 
-package circuitbreaker
+package circuitbreakerdistributed
 
 import akka.actor.{Actor, ActorRef, Props}
 
